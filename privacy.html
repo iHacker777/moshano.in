@@ -64,6 +64,13 @@
     footer { border-top: 1px solid var(--ring); margin-top: 48px; }
     .foot { display:flex; justify-content:space-between; gap:16px; padding: 24px 0; flex-wrap: wrap; }
     .tiny { font-size: 12px; color: var(--muted); }
+
+	/* Active nav highlight */
+	.nav a.btn.active,
+	.nav a.btn[aria-current="page"] {
+	  border-color: var(--accent);
+	  box-shadow: 0 6px 18px rgba(33,212,253,.25);
+	}  
   </style>
   <script defer src="/assets/js/main.js"></script>
 </head>
@@ -75,9 +82,11 @@
         <span>Moshano Technologies</span>
       </a>
       <div style="display:flex; gap:10px; align-items:center">
-        <a class="btn" href="/#features">Features</a>
-        <a class="btn" href="/#pricing">Pricing</a>
-        <a class="btn" href="/#contact">Contact</a>
+		<a class="btn" href="/#features">Features</a>
+		<a class="btn" href="/#pricing">Pricing</a>
+		<a class="btn" href="/#contact">Contact</a>
+		<a class="btn active" aria-current="page" href="/privacy.html">Privacy</a>
+		<a class="btn" href="/terms.html">Terms</a>
         <a class="btn" id="themeToggle" href="#" aria-label="Toggle theme">☀︎</a>
       </div>
     </nav>
