@@ -2,35 +2,40 @@
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 
-  // Theme toggle: respects prefers-color-scheme by default, toggles a data-theme attr for custom control
+  // Theme toggle
+  const root = document.documentElement;       // <html>
   const toggle = document.getElementById('themeToggle');
-  const root = document.documentElement;
-  const THEME_KEY = 'moshano_theme';
+  const KEY = 'moshano_theme';                 // 'light' | 'dark' | null
 
   function applyTheme(theme){
-    if(theme === 'light'){
+    if (theme === 'light') {
       root.setAttribute('data-theme', 'light');
-      toggle.textContent = '☾';
-    } else if(theme === 'dark'){
+      if (toggle) toggle.textContent = '☾';
+    } else if (theme === 'dark') {
       root.setAttribute('data-theme', 'dark');
-      toggle.textContent = '☀︎';
+      if (toggle) toggle.textContent = '☀︎';
     } else {
+      // follow system preference
       root.removeAttribute('data-theme');
-      toggle.textContent = '☀︎';
+      if (toggle) toggle.textContent = '☀︎';
     }
   }
 
-  const saved = localStorage.getItem(THEME_KEY);
+  // Initialize from saved value (or follow system)
+  const saved = localStorage.getItem(KEY);     // 'light' | 'dark' | null
   applyTheme(saved);
 
-  toggle && toggle.addEventListener('click', function(e){
-    e.preventDefault();
-    const current = localStorage.getItem(THEME_KEY);
-    const next = current === 'dark' ? 'light' : 'dark';
-    localStorage.setItem(THEME_KEY, next || 'dark');
-    applyTheme(next);
-  });
+  if (toggle) {
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      const current = localStorage.getItem(KEY);         // may be null
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem(KEY, next);
+      applyTheme(next);
+    });
+  }
 })();
+
 // Contact form wiring (Formspree AJAX)
 (function(){
   const form = document.getElementById('contactForm');

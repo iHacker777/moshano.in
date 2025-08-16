@@ -140,6 +140,87 @@
 	  .nav { flex-wrap: wrap; gap: 8px; }
 	  .nav .btn { padding: 6px 10px; }
 	}
+	/* Prevent accidental horizontal scroll on mobile */
+html, body { overflow-x: hidden; }
+
+/* Make the nav layout responsive */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;            /* allow wrapping */
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;            /* wrap buttons to next line when needed */
+  margin-left: auto;          /* push links to the right on desktop */
+}
+
+/* Compact the buttons a bit so more fit per row */
+.nav a.btn { padding: 8px 12px; }
+
+/* Tablet & down: let links take full width, form two neat rows if needed */
+@media (max-width: 768px){
+  .nav-links {
+    width: 100%;              /* drop below the brand and fill the line */
+    order: 2;                 /* brand stays on top, links below */
+    justify-content: flex-start;
+    gap: 8px;
+  }
+}
+
+/* Small phones: slightly smaller buttons to avoid overflow */
+@media (max-width: 480px){
+  .nav a.btn { padding: 6px 10px; font-size: 14px; }
+}
+/* Active nav highlight */
+.nav a.btn.active,
+.nav a.btn[aria-current="page"] {
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(33,212,253,.25);
+}
+/* Explicit themes the JS can switch */
+:root[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --card: #111111;
+  --text: #ffffff;
+  --muted: #7a7a7a;
+  --ring: rgba(255,255,255,.15);
+}
+
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --card: #f5f5f5;
+  --text: #0a0a0a;
+  --muted: #555;
+  --ring: rgba(0,0,0,.12);
+}
+
+/* Optional: smoothen the switch */
+html, body { transition: background-color .2s ease, color .2s ease; }
+/* JS-driven themes — must come AFTER your base variables and media queries */
+:root[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --card: #111111;
+  --text: #ffffff;
+  --muted: #7a7a7a;
+  --ring: rgba(255,255,255,.15);
+}
+
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --card: #f5f5f5;
+  --text: #0a0a0a;
+  --muted: #555;
+  --ring: rgba(0,0,0,.12);
+}
+
+/* Optional: smoothen the switch */
+html, body { transition: background-color .2s ease, color .2s ease; }
   </style>
   <script defer src="/assets/js/main.js"></script>
 </head>
@@ -150,16 +231,15 @@
         <img src="/assets/img/logo.png" alt="moshano logo" width="32" height="32">
         <span>Moshano Technologies</span>
       </a>
-      <div style="display:flex; gap:10px; align-items:center">
-        <a class="btn" href="#features">Features</a>
-        <a class="btn" href="#pricing">Pricing</a>
-        <a class="btn" href="#contact">Contact</a>
+	  <div class="nav-links">
 		<a class="btn" href="/#features">Features</a>
+		<a class="btn" href="/#pricing">Pricing</a>
+		<a class="btn" href="/#contact">Contact</a>
+		<a class="btn" href="/about.html">About</a>
 		<a class="btn" href="/privacy.html">Privacy</a>
 		<a class="btn" href="/terms.html">Terms</a>
-
-        <a class="btn" id="themeToggle" href="#" aria-label="Toggle theme">☀︎</a>
-      </div>
+		<a class="btn" id="themeToggle" href="#" aria-label="Toggle theme">☀︎</a>
+	  </div>
     </nav>
 
     <section class="hero">

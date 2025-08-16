@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Terms • moshano technologies</title>
+  <title>About Us • moshano technologies</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <style>
     :root {
@@ -64,13 +64,6 @@
     footer { border-top: 1px solid var(--ring); margin-top: 48px; }
     .foot { display:flex; justify-content:space-between; gap:16px; padding: 24px 0; flex-wrap: wrap; }
     .tiny { font-size: 12px; color: var(--muted); }
-
-	/* Active nav highlight */
-	.nav a.btn.active,
-	.nav a.btn[aria-current="page"] {
-	  border-color: var(--accent);
-	  box-shadow: 0 6px 18px rgba(33,212,253,.25);
-	}  
 	/* Prevent accidental horizontal scroll on mobile */
 html, body { overflow-x: hidden; }
 
@@ -166,56 +159,42 @@ html, body { transition: background-color .2s ease, color .2s ease; }
 		<a class="btn" href="/#features">Features</a>
 		<a class="btn" href="/#pricing">Pricing</a>
 		<a class="btn" href="/#contact">Contact</a>
-		<a class="btn" href="/about.html">About</a>
+		<a class="btn active" aria-current="page" href="/about.html">About</a>
 		<a class="btn" href="/privacy.html">Privacy</a>
-		<a class="btn active" aria-current="page" href="/terms.html">Terms</a>
+		<a class="btn" href="/terms.html">Terms</a>
+		
 		<a class="btn" id="themeToggle" href="#" aria-label="Toggle theme">☀︎</a>
 
       </div>
     </nav>
 
     <div class="card">
-      <h1>Terms of Service</h1>
-      <p>Welcome to Moshano Technologies. These terms and conditions (“Terms”) govern your access to and use of our payment services, dashboard, APIs, and related products (“Services”). By using our Services, you agree to these Terms.</p>
+      <h1>About Us</h1>
+      <p><strong>Moshano Technologies</strong> is a modern payments company built for ambitious businesses in India. Our mission is simple: to make payments seamless, compliant, and developer-friendly—so you can focus on growth, not complexity.</p>
 
-      <h2>1) Eligibility & Account</h2>
-      <p>You must be legally capable of entering into contracts and use the Services for lawful business purposes. You’re responsible for maintaining accurate account information and safeguarding credentials.</p>
+      <h2>Who We Are</h2>
+      <p>Founded by <strong>Shanoof</strong>, Moshano Technologies brings together deep technical expertise with a clear understanding of the Indian financial landscape. We combine security, compliance, and usability to create a gateway that just works—fast, reliable, and scalable.</p>
 
-      <h2>2) Services & Compliance</h2>
-      <p>We provide payment processing via UPI, cards, net banking, and other permitted rails. You agree to comply with applicable laws and network rules (e.g., RBI, NPCI, card schemes).</p>
+      <h2>Our Office</h2>
+      <p>We’re proudly based in <strong>downtown Kozhikode, Kerala</strong>. From our office in the heart of the city, we support businesses across India with responsive service and real engineering-first support.</p>
 
-      <h2>3) Fees, Payouts & Settlements</h2>
-      <p>Fees are communicated in your merchant agreement or pricing schedule. Settlement timelines depend on acquiring partners and bank working days. We may set off chargebacks, refunds, or penalties.</p>
-
-      <h2>4) Restricted Activities</h2>
+      <h2>What Drives Us</h2>
       <ul>
-        <li>Illegal goods/services, misleading claims, or prohibited high-risk categories.</li>
-        <li>Attempts to bypass security, falsify KYC, or manipulate transactions.</li>
+        <li><strong>Simplicity:</strong> Clear APIs, fast onboarding, and tools that make sense.</li>
+        <li><strong>Security:</strong> Compliance and safety are at the core of everything we do.</li>
+        <li><strong>Support:</strong> A team that codes, ships, and stands by you when it matters most.</li>
       </ul>
 
-      <h2>5) Data Protection</h2>
-      <p>We implement reasonable safeguards for transaction and personal data. See our <a href="/privacy.html">Privacy Policy</a> for details.</p>
+      <h2>Looking Ahead</h2>
+      <p>We believe the future of commerce in India is digital, instant, and inclusive. Moshano Technologies is here to power that future—transaction by transaction.</p>
 
-      <h2>6) Availability & Support</h2>
-      <p>We aim for high availability but do not guarantee uninterrupted access. Planned maintenance or third-party outages may affect uptime.</p>
-
-      <h2>7) Liability</h2>
-      <p>To the extent permitted by law, we are not liable for indirect, incidental, or consequential damages. Our aggregate liability is limited to fees paid to us in the preceding three months.</p>
-
-      <h2>8) Termination</h2>
-      <p>We may suspend or terminate access for suspected fraud, non-compliance, or risk concerns. You may stop using the Services at any time.</p>
-
-      <h2>9) Changes to Terms</h2>
-      <p>We may update these Terms. Continued use after updates constitutes acceptance. We’ll post the latest version on this page.</p>
-
-      <p class="tiny" style="margin-top:18px"><em>Last updated: 16 Aug 2025</em></p>
-      <p style="margin-top:10px"><a href="/">← Back to Home</a></p>
+      <p style="margin-top:20px"><a href="/">← Back to Home</a></p>
     </div>
 
     <footer>
       <div class="foot">
         <div class="tiny">© <span id="year"></span> moshano technologies • All rights reserved</div>
-        <div class="tiny"><a href="/privacy.html">Privacy</a> • <a href="/terms.html">Terms</a></div>
+        <div class="tiny"><a href="/about.html">About</a> • <a href="/privacy.html">Privacy</a> • <a href="/terms.html">Terms</a></div>
       </div>
     </footer>
   </div>
