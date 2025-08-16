@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>moshano technologies — Modern Payments, Minimal Fuss</title>
+  <meta name="description" content="moshano technologies is a modern, developer-friendly payment gateway for growing businesses in India.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="moshano technologies">
+  <meta property="og:description" content="Modern, compliant, developer-friendly payments.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moshano.in/">
+  <meta property="og:image" content="https://moshano.in/assets/img/logo.svg">
+  <style>
+    /* Minimal, modern, system-font stack */
+    :root {
+      --bg: #0a0a0a;
+      --card: #111111;
+      --muted: #7a7a7a;
+      --text: #ffffff;
+      --accent: #21d4fd;
+      --accent-2: #b721ff;
+      --ring: rgba(255,255,255,.15);
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --maxw: 1120px;
+    }
+    @media (prefers-color-scheme: light) {
+      :root{
+        --bg: #ffffff;
+        --card: #f5f5f5;
+        --text:#0a0a0a;
+        --muted:#555;
+        --ring: rgba(0,0,0,.12);
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font: 15px/1.6 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 10% -10%, rgba(33,212,253,.12), transparent 60%),
+                  radial-gradient(900px 600px at 110% -20%, rgba(183,33,255,.10), transparent 50%),
+                  var(--bg);
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 28px 20px; }
+    .nav {
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+    }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.4px }
+    .brand img { width:32px; height:32px }
+    .nav a.btn {
+      border: 1px solid var(--ring);
+      padding: 8px 14px; border-radius: 10px; transition: .2s ease;
+    }
+    .nav a.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow) }
+    .hero {
+      display:grid; grid-template-columns: 1.15fr 1fr; gap: 28px; align-items:center;
+      padding: 48px 0 16px;
+    }
+    @media (max-width: 900px){ .hero{ grid-template-columns: 1fr; } }
+    h1 {
+      font-size: clamp(32px, 6vw, 56px);
+      line-height: 1.05;
+      margin: 0 0 14px;
+      letter-spacing: -0.02em;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .lead { color: var(--muted); font-size: 18px; max-width: 60ch; }
+    .cta { margin-top: 22px; display:flex; gap:12px; flex-wrap:wrap }
+    .button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color:#fff; padding:12px 18px; border-radius: 12px; border:0; cursor:pointer; font-weight:700;
+      transition:.2s ease; box-shadow: var(--shadow);
+    }
+    .button:hover { transform: translateY(-1px); }
+    .ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--ring);
+      box-shadow: none;
+    }
+    .card-grid { display:grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 34px; }
+    @media (max-width: 900px){ .card-grid{ grid-template-columns:1fr; } }
+    .card {
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--ring);
+      border-radius: var(--radius);
+      padding: 18px; backdrop-filter: blur(6px);
+    }
+    .card h3 { margin: 6px 0 8px; font-size: 18px }
+    .eyebrow { text-transform: uppercase; font-size: 12px; letter-spacing: .16em; color: var(--muted) }
+    .section { padding: 56px 0; }
+    .section h2 { margin: 0 0 10px; font-size: clamp(24px,4vw,36px); letter-spacing: -0.02em; }
+    .muted { color: var(--muted); }
+    .features li { margin: 8px 0; }
+    .badge {
+      border: 1px solid var(--ring);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      display: inline-flex; align-items:center; gap:8px;
+    }
+    footer { border-top: 1px solid var(--ring); margin-top: 48px; }
+    .foot { display:flex; justify-content:space-between; gap:16px; padding: 24px 0; flex-wrap: wrap; }
+    .tiny { font-size: 12px; color: var(--muted); }
+    .kbd { font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace; font-size: 13px; padding: 2px 6px; border: 1px solid var(--ring); border-radius: 6px; }
+    .codeblock { background: #00000015; border: 1px solid var(--ring); padding: 12px; border-radius: 12px; overflow:auto; }
+  </style>
+  <script defer src="/assets/js/main.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="/">
+        <img src="/assets/img/logo.svg" alt="moshano logo" width="32" height="32">
+        <span>moshano technologies</span>
+      </a>
+      <div style="display:flex; gap:10px; align-items:center">
+        <a class="btn" href="#features">Features</a>
+        <a class="btn" href="#pricing">Pricing</a>
+        <a class="btn" href="#contact">Contact</a>
+        <a class="btn" id="themeToggle" href="#" aria-label="Toggle theme">☀︎</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <h1>Modern payments. Minimal fuss.</h1>
+        <p class="lead">
+          A clean, developer-first payment gateway built for ambitious Indian businesses.
+          Fast onboarding, secure transactions, and APIs that just make sense.
+        </p>
+        <div class="cta">
+          <a class="button" href="#contact">Get in touch</a>
+          <a class="button ghost" href="#docs">View API basics</a>
+        </div>
+        <div style="margin-top: 18px; display:flex; gap:10px; flex-wrap:wrap;">
+          <span class="badge">🔒 PCI-DSS aware</span>
+          <span class="badge">⚡ Real-time webhooks</span>
+          <span class="badge">🧩 Drop-in UI</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Live Preview</div>
+        <h3>Checkout snippet</h3>
+        <div class="codeblock" aria-label="code sample" role="region">
+<pre><code>&lt;script src="https://cdn.moshano.in/js/checkout.js"&gt;&lt;/script&gt;
+&lt;button id="pay"&gt;Pay ₹499&lt;/button&gt;
+&lt;script&gt;
+  const pay = new MoshanoCheckout({ orderId: "ord_123", amount: 49900 });
+  document.getElementById('pay').onclick = () =&gt; pay.open();
+&lt;/script&gt;</code></pre>
+        </div>
+        <p class="tiny muted">Note: Demo only. Replace with your real order IDs when live.</p>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="eyebrow">Why moshano</div>
+      <h2>Simple to integrate. Safe to scale.</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Clean REST APIs</h3>
+          <p class="muted">Predictable resources, sensible errors, and thoughtful rate limits.</p>
+        </div>
+        <div class="card">
+          <h3>Secure by default</h3>
+          <p class="muted">HMAC-signed webhooks, tokenized cards, and 3DS flows baked in.</p>
+        </div>
+        <div class="card">
+          <h3>All major rails</h3>
+          <p class="muted">UPI, cards, netbanking, wallets—and settlement reports that reconcile cleanly.</p>
+        </div>
+        <div class="card">
+          <h3>Observability</h3>
+          <p class="muted">Latency, success rates, disputes, and payouts—visualized in your dashboard.</p>
+        </div>
+        <div class="card">
+          <h3>Compliance-first</h3>
+          <p class="muted">Built with Indian regulations and data residency considerations in mind.</p>
+        </div>
+        <div class="card">
+          <h3>Support that ships</h3>
+          <p class="muted">Engineering-first support with real SLAs. Talk to humans who code.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pricing">
+      <div class="eyebrow">Pricing</div>
+      <h2>Clear, usage-based pricing</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Starter</h3>
+          <p class="muted">For new startups testing payments.</p>
+          <ul class="features">
+            <li>2.0% per successful card txn</li>
+            <li>UPI at 0.5%</li>
+            <li>No setup fee</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Growth</h3>
+          <p class="muted">For teams scaling revenue.</p>
+          <ul class="features">
+            <li>Custom rates above ₹10L/month</li>
+            <li>Priority support</li>
+            <li>Dispute assistance</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Enterprise</h3>
+          <p class="muted">For regulated & high-volume setups.</p>
+          <ul class="features">
+            <li>Dedicated manager</li>
+            <li>On-prem & VPC options</li>
+            <li>Procurement-friendly</li>
+          </ul>
+        </div>
+      </div>
+      <p class="tiny muted">The above is sample copy—update with your real rates and terms.</p>
+    </section>
+
+    <section class="section" id="docs">
+      <div class="eyebrow">API at a glance</div>
+      <h2>Three steps to accept payments</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>1) Create an order</h3>
+          <div class="codeblock"><pre><code>POST /v1/orders
+{ "amount": 49900, "currency":"INR", "notes": { "cartId":"C-781" } }</code></pre></div>
+        </div>
+        <div class="card">
+          <h3>2) Open checkout</h3>
+          <div class="codeblock"><pre><code>&lt;script src="https://cdn.moshano.in/js/checkout.js"&gt;&lt;/script&gt;
+new MoshanoCheckout({ orderId, amount }).open()</code></pre></div>
+        </div>
+        <div class="card">
+          <h3>3) Verify & capture</h3>
+          <div class="codeblock"><pre><code>POST /v1/payments/{id}/capture
+// verify HMAC: X-Moshano-Signature: {sha256=...}</code></pre></div>
+        </div>
+      </div>
+      <p class="tiny muted">Get full docs by emailing <span class="kbd">support@moshano.in</span>.</p>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="eyebrow">Let’s talk</div>
+      <h2>Book a demo</h2>
+      <div class="card">
+        <form action="mailto:support@moshano.in" method="post" enctype="text/plain">
+          <label>
+            <div class="muted tiny">Your name</div>
+            <input required name="name" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)">
+          </label>
+          <div style="height:10px"></div>
+          <label>
+            <div class="muted tiny">Email</div>
+            <input required type="email" name="email" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)">
+          </label>
+          <div style="height:10px"></div>
+          <label>
+            <div class="muted tiny">Message</div>
+            <textarea name="message" rows="4" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)"></textarea>
+          </label>
+          <div style="height:16px"></div>
+          <button class="button" type="submit">Request demo</button>
+        </form>
+        <p class="tiny muted">Prefer WhatsApp? Ping us at <span class="kbd">+91-XXXXXXXXXX</span> (update this).</p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="foot">
+        <div class="tiny">
+          © <span id="year"></span> moshano technologies • All rights reserved
+        </div>
+        <div class="tiny">
+          <a href="/privacy.html">Privacy</a> • <a href="/terms.html">Terms</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
