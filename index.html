@@ -10,7 +10,7 @@
   <meta property="og:description" content="Modern, compliant, developer-friendly payments.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://moshano.in/">
-  <meta property="og:image" content="https://moshano.in/assets/img/logo.svg">
+  <meta property="og:image" content="https://moshano.in/assets/img/logo.png">
   <style>
     /* Minimal, modern, system-font stack */
     :root {
@@ -252,24 +252,35 @@ new MoshanoCheckout({ orderId, amount }).open()</code></pre></div>
       <div class="eyebrow">Let’s talk</div>
       <h2>Book a demo</h2>
       <div class="card">
-        <form action="mailto:support@moshano.in" method="post" enctype="text/plain">
-          <label>
-            <div class="muted tiny">Your name</div>
-            <input required name="name" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)">
-          </label>
-          <div style="height:10px"></div>
-          <label>
-            <div class="muted tiny">Email</div>
-            <input required type="email" name="email" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)">
-          </label>
-          <div style="height:10px"></div>
-          <label>
-            <div class="muted tiny">Message</div>
-            <textarea name="message" rows="4" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)"></textarea>
-          </label>
-          <div style="height:16px"></div>
-          <button class="button" type="submit">Request demo</button>
-        </form>
+		<form id="contactForm" method="POST" data-formspree-id="mrbldnbv">
+		  <!-- Honeypot (spam protection) -->
+		  <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+
+		  <label>
+			<div class="muted tiny">Your Name</div>
+			<input required name="name" autocomplete="name" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)">
+		  </label>
+		  <div style="height:10px"></div>
+
+		  <label>
+			<div class="muted tiny">Email</div>
+			<input required type="email" name="email" autocomplete="email" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)">
+		  </label>
+		  <div style="height:10px"></div>
+
+		  <label>
+			<div class="muted tiny">Message</div>
+			<textarea name="message" rows="4" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:transparent;color:var(--text)"></textarea>
+		  </label>
+
+		  <div style="height:16px"></div>
+		  <button class="button" type="submit" id="contactSubmit">Request demo</button>
+
+		  <!-- Inline status messages -->
+		  <p id="contactNote" class="tiny muted" style="margin-top:8px">We’ll get back within 1 business day.</p>
+		  <div id="contactSuccess" style="display:none;margin-top:10px" class="tiny">✅ Thanks! We’ve received your message.</div>
+		  <div id="contactError" style="display:none;margin-top:10px" class="tiny">❌ Something went wrong. Please try again or email <span class="kbd">support@moshano.in</span>.</div>
+		</form>
         <p class="tiny muted">Prefer WhatsApp? Ping us at <span class="kbd">+91-6282266336</span> </p>
       </div>
     </section>
