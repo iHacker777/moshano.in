@@ -197,6 +197,17 @@ function TransactionsPage(){
   const limit = 50;
   const offset = page * limit;
 
+  // INR formatter (expects rupees)
+  const fmtINR = (rupees) =>
+    new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(rupees || 0);
+
+  // Convert row to rupees regardless of server field
+  const toRupees = (t) => {
+    if (typeof t.amount_paise === "number") return t.amount_paise / 100; // integer paise → rupees
+    if (typeof t.amount === "number") return t.amount;                   // already rupees
+    return 0;
+  };
+
   const load = async () => {
     setLoading(true); setErr("");
     try{
@@ -239,7 +250,7 @@ function TransactionsPage(){
       ),
 
       React.createElement("div", { className: "overflow-auto rounded-2xl border border-white/10" },
-        React.createElement("table", { className: "w-full text-sm min-w-[1000px]" },
+        React.createElement("table", { className: "w-full text-sm min-w-[1100px]" },
           React.createElement("thead", { className: "bg-white/5" },
             React.createElement("tr", { className: "text-left" },
               React.createElement("th", { className: "p-3" }, "S/N"),
@@ -247,20 +258,22 @@ function TransactionsPage(){
               React.createElement("th", { className: "p-3" }, "Sender UPI ID"),
               React.createElement("th", { className: "p-3" }, "Receiver UPI ID"),
               React.createElement("th", { className: "p-3" }, "UTR"),
+              React.createElement("th", { className: "p-3" }, "Amount"),
               React.createElement("th", { className: "p-3" }, "Status"),
               React.createElement("th", { className: "p-3" }, "Actions")
             )
           ),
           React.createElement("tbody", null,
             (items.length === 0 && !loading) ?
-              React.createElement("tr", null, React.createElement("td", { colSpan: 7, className: "p-6 text-center text-neutral-400" }, "No records")) :
+              React.createElement("tr", null, React.createElement("td", { colSpan: 8, className: "p-6 text-center text-neutral-400" }, "No records")) :
               items.map((t, idx) => {
                 const status = (t.status || "pending").toLowerCase();
                 const statusColor =
                   status === "approved" ? "text-emerald-400" :
                   status === "declined" ? "text-rose-400" :
-                  "text-sky-400"; // pending or blank
+                  "text-sky-400";
                 const disabled = status === "approved" || status === "declined";
+                const rupees = toRupees(t);
 
                 return React.createElement("tr", { key: t.id, className: "border-t border-white/5" },
                   React.createElement("td", { className: "p-3" }, offset + idx + 1),
@@ -268,6 +281,7 @@ function TransactionsPage(){
                   React.createElement("td", { className: "p-3 font-mono" }, t.sender_upi_id),
                   React.createElement("td", { className: "p-3 font-mono" }, t.receiver_upi_id),
                   React.createElement("td", { className: "p-3 font-mono" }, t.utr || React.createElement("span", { className: "text-neutral-500" }, "(empty)")),
+                  React.createElement("td", { className: "p-3 font-mono text-right" }, fmtINR(rupees)),
                   React.createElement("td", { className: `p-3 font-medium ${statusColor}` },
                     status.charAt(0).toUpperCase() + status.slice(1)
                   ),
@@ -304,6 +318,7 @@ function TransactionsPage(){
   );
 }
 </script>
+
 
 
 function App(){
