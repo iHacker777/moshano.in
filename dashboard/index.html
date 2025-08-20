@@ -171,18 +171,31 @@ function LoginPage({ onLogin }) {
 }
 
 function DashboardHome() {
-  const React_ = React; const { useEffect, useState } = React_;
-  const [stats, setStats] = useState({ total: 0, approved: 0, pending: 0, declined: 0 });
+  const React_ = React; 
+  const { useEffect, useState } = React_;
+  const [stats, setStats] = useState({});
+  
+  // INR formatter
+  const fmtINR = (r) =>
+    new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 })
+      .format((r || 0) / 100);   // because backend returns paise
+
   useEffect(() => { apiFetch("/stats").then(setStats).catch(()=>{}); }, []);
+
   return (
     React.createElement("div", { className: "grid sm:grid-cols-2 lg:grid-cols-4 gap-4" },
       React.createElement(Stat, { label: "Total Txns", value: stats.total }),
       React.createElement(Stat, { label: "Approved", value: stats.approved }),
       React.createElement(Stat, { label: "Pending", value: stats.pending }),
       React.createElement(Stat, { label: "Declined", value: stats.declined }),
+      React.createElement(Stat, { label: "Amount Requested Today", value: fmtINR(stats.today_total_paise) }),
+      React.createElement(Stat, { label: "Amount Approved Today", value: fmtINR(stats.today_approved_paise) }),
+      React.createElement(Stat, { label: "Total Requested Amount", value: fmtINR(stats.total_paise) }),
+      React.createElement(Stat, { label: "Total Approved Amount", value: fmtINR(stats.approved_paise) }),
     )
   );
 }
+
 
 
 function TransactionsPage(){
