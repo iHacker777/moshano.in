@@ -1,4 +1,3 @@
-#dashboard/index.html
 <!doctype html>
 <html lang="en">
 <head>
@@ -95,17 +94,34 @@ function LoginPage({ onLogin }) {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
 
-  async function submit(e){
-    e.preventDefault();
-    setErr(""); setLoading(true);
-    try{
-      const { token, user } = await apiFetch("/login", { method: "POST", body: JSON.stringify({ email, password }) });
-      localStorage.setItem("moshano_token", token);
-      onLogin(user);
-      location.hash = "/dashboard";
-    }catch(e){ setErr(e.message || "Login failed"); }
-    finally{ setLoading(false); }
-  }
+	async function submit(e){
+	  e.preventDefault();
+	  if (loading) return;                  // prevent double click
+	  setErr(""); 
+	  setLoading(true);
+
+	  try{
+		const payload = { email: email.trim(), password };
+		const { token, user } = await apiFetch("/login", {
+		  method: "POST",
+		  body: JSON.stringify(payload)
+		});
+
+		// save token + user for future reloads
+		localStorage.setItem("moshano_token", token);
+		localStorage.setItem("moshano_user", JSON.stringify(user));
+
+		onLogin(user);                      // updates header name
+		location.hash = "/dashboard";
+	  }catch(err){
+		const msg = String(err?.message || err);
+		setErr(msg.includes("401") || msg.toLowerCase().includes("bad creds")
+		  ? "Incorrect email or password"
+		  : `Login failed: ${msg}`);
+	  }finally{
+		setLoading(false);
+	  }
+	}
 
   return (
     React.createElement("div", { className: "min-h-screen grid place-items-center px-4" },
