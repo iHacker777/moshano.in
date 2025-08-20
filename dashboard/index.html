@@ -1,21 +1,25 @@
 #dashboard/index.html
-import React, { useEffect, useMemo, useState } from "react";
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Moshano Admin</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<!-- Tailwind via CDN (no build needed) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- In-browser React (no build needed) -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+</head>
+<body class="bg-neutral-950 text-neutral-100">
+<div id="app"></div>
 
-// --- Simple router ---
-function useHashRoute() {
-  const [route, setRoute] = useState(() => location.hash.slice(1) || "/login");
-  useEffect(() => {
-    const onHash = () => setRoute(location.hash.slice(1) || "/login");
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-  const push = (path) => (location.hash = path);
-  return { route, push };
-}
+<script type="text/javascript">
+/** CONFIG **/
+const API_BASE = "https://moshano-api.shanoof.workers.dev"; // ← change if needed
 
-// --- API helper ---
-const API_BASE = "https://moshano-api.shanoof.workers.dev"; // change if backend served elsewhere
-
+/** API helper **/
 function apiFetch(path, opts = {}) {
   const token = localStorage.getItem("moshano_token");
   const headers = {
@@ -23,7 +27,7 @@ function apiFetch(path, opts = {}) {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(opts.headers || {}),
   };
-  return fetch(`${API_BASE}${path}`,(opts.method ? opts : { ...opts, method: opts.method || "GET" , headers}))
+  return fetch(`${API_BASE}${path}`, { ...opts, headers })
     .then(async (r) => {
       if (!r.ok) throw new Error((await r.text()) || r.statusText);
       const ct = r.headers.get("content-type") || "";
@@ -31,43 +35,61 @@ function apiFetch(path, opts = {}) {
     });
 }
 
-// --- UI Primitives (Tailwind) ---
-const Shell = ({ user, onLogout, children }) => (
-  <div className="min-h-screen bg-neutral-950 text-neutral-100">
-    <header className="border-b border-white/10 sticky top-0 backdrop-blur bg-black/40 z-40">
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <img src="/assets/img/logo.png" alt="Moshano" className="w-7 h-7 rounded" />
-          <span className="font-semibold tracking-tight">Moshano Admin</span>
-          <nav className="ml-6 hidden sm:flex items-center gap-1 text-sm">
-            <a href="#/dashboard" className="px-2 py-1 rounded hover:bg-white/5">Dashboard</a>
-            <a href="#/transactions" className="px-2 py-1 rounded hover:bg-white/5">Transactions</a>
-          </nav>
-        </div>
-        <div className="flex items-center gap-3 text-sm">
-          <span className="text-neutral-400">Signed in as</span>
-          <span className="font-medium">{user?.name || "—"}</span>
-          <button onClick={onLogout} className="px-2 py-1 rounded bg-white/10 hover:bg-white/15">Logout</button>
-        </div>
-      </div>
-    </header>
-    <main className="max-w-6xl mx-auto px-4 py-6">{children}</main>
-    <footer className="border-t border-white/10 text-xs text-neutral-400">
-      <div className="max-w-6xl mx-auto px-4 py-4">© {new Date().getFullYear()} moshano technologies</div>
-    </footer>
-  </div>
-);
+/** Tiny hash router **/
+function useHashRoute(React) {
+  const { useEffect, useState } = React;
+  const [route, setRoute] = useState(() => location.hash.slice(1) || "/login");
+  useEffect(() => {
+    const onHash = () => setRoute(location.hash.slice(1) || "/login");
+    addEventListener("hashchange", onHash);
+    return () => removeEventListener("hashchange", onHash);
+  }, []);
+  const push = (path) => (location.hash = path);
+  return { route, push };
+}
 
-const Stat = ({ label, value, hint }) => (
-  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-    <div className="text-xs uppercase tracking-wider text-neutral-400">{label}</div>
-    <div className="text-2xl font-semibold mt-1">{value}</div>
-    {hint && <div className="text-xs text-neutral-500 mt-1">{hint}</div>}
-  </div>
-);
+/** Components **/
+function Shell({ user, onLogout, children }) {
+  return (
+    React.createElement("div", null,
+      React.createElement("header", { className: "border-b border-white/10 sticky top-0 backdrop-blur bg-black/40 z-40" },
+        React.createElement("div", { className: "max-w-6xl mx-auto px-4 h-14 flex items-center justify-between" },
+          React.createElement("div", { className: "flex items-center gap-3" },
+            React.createElement("img", { src: "/assets/img/logo.png", alt: "Moshano", className: "w-7 h-7 rounded" }),
+            React.createElement("span", { className: "font-semibold tracking-tight" }, "Moshano Admin"),
+            React.createElement("nav", { className: "ml-6 hidden sm:flex items-center gap-1 text-sm" },
+              React.createElement("a", { href: "#/dashboard", className: "px-2 py-1 rounded hover:bg-white/5" }, "Dashboard"),
+              React.createElement("a", { href: "#/transactions", className: "px-2 py-1 rounded hover:bg-white/5" }, "Transactions")
+            )
+          ),
+          React.createElement("div", { className: "flex items-center gap-3 text-sm" },
+            React.createElement("span", { className: "text-neutral-400" }, "Signed in as"),
+            React.createElement("span", { className: "font-medium" }, user?.name || "—"),
+            React.createElement("button", { onClick: onLogout, className: "px-2 py-1 rounded bg-white/10 hover:bg-white/15" }, "Logout")
+          )
+        )
+      ),
+      React.createElement("main", { className: "max-w-6xl mx-auto px-4 py-6" }, children),
+      React.createElement("footer", { className: "border-t border-white/10 text-xs text-neutral-400" },
+        React.createElement("div", { className: "max-w-6xl mx-auto px-4 py-4" }, `© ${new Date().getFullYear()} moshano technologies`)
+      )
+    )
+  );
+}
 
-// --- Pages ---
+function Stat({ label, value, hint }) {
+  return (
+    React.createElement("div", { className: "rounded-2xl border border-white/10 bg-white/5 p-4" },
+      React.createElement("div", { className: "text-xs uppercase tracking-wider text-neutral-400" }, label),
+      React.createElement("div", { className: "text-2xl font-semibold mt-1" }, value),
+      hint ? React.createElement("div", { className: "text-xs text-neutral-500 mt-1" }, hint) : null
+    )
+  );
+}
+
 function LoginPage({ onLogin }) {
+  const React_ = React;
+  const { useState } = React_;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -75,8 +97,7 @@ function LoginPage({ onLogin }) {
 
   async function submit(e){
     e.preventDefault();
-    setErr("");
-    setLoading(true);
+    setErr(""); setLoading(true);
     try{
       const { token, user } = await apiFetch("/login", { method: "POST", body: JSON.stringify({ email, password }) });
       localStorage.setItem("moshano_token", token);
@@ -87,50 +108,56 @@ function LoginPage({ onLogin }) {
   }
 
   return (
-    <div className="min-h-screen grid place-items-center bg-neutral-950 text-neutral-100 px-4">
-      <div className="w-full max-w-md border border-white/10 rounded-3xl p-6 bg-white/5 backdrop-blur">
-        <div className="flex items-center gap-3 mb-4">
-          <img src="/assets/img/logo.png" alt="Moshano" className="w-8 h-8" />
-          <h1 className="text-xl font-semibold">Moshano Admin</h1>
-        </div>
-        <p className="text-sm text-neutral-400 mb-4">Sign in to manage payments.</p>
-        <form onSubmit={submit} className="space-y-3">
-          <div>
-            <label className="block text-sm mb-1">Email</label>
-            <input required type="email" value={email} onChange={(e)=>setEmail(e.target.value)}
-                   className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-white/20"/>
-          </div>
-          <div>
-            <label className="block text-sm mb-1">Password</label>
-            <input required type="password" value={password} onChange={(e)=>setPassword(e.target.value)}
-                   className="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-white/20"/>
-          </div>
-          {err && <div className="text-red-400 text-sm">{err}</div>}
-          <button disabled={loading} className="w-full py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 font-semibold disabled:opacity-60">
-            {loading ? "Signing in…" : "Sign in"}
-          </button>
-        </form>
-      </div>
-    </div>
+    React.createElement("div", { className: "min-h-screen grid place-items-center px-4" },
+      React.createElement("div", { className: "w-full max-w-md border border-white/10 rounded-3xl p-6 bg-white/5 backdrop-blur" },
+        React.createElement("div", { className: "flex items-center gap-3 mb-4" },
+          React.createElement("img", { src: "/assets/img/logo.png", alt: "Moshano", className: "w-8 h-8" }),
+          React.createElement("h1", { className: "text-xl font-semibold" }, "Moshano Admin")
+        ),
+        React.createElement("p", { className: "text-sm text-neutral-400 mb-4" }, "Sign in to manage payments."),
+        React.createElement("form", { onSubmit: submit, className: "space-y-3" },
+          React.createElement("div", null,
+            React.createElement("label", { className: "block text-sm mb-1" }, "Email"),
+            React.createElement("input", {
+              required: true, type: "email", value: email, onChange: (e)=>setEmail(e.target.value),
+              className: "w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-white/20"
+            })
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "block text-sm mb-1" }, "Password"),
+            React.createElement("input", {
+              required: true, type: "password", value: password, onChange: (e)=>setPassword(e.target.value),
+              className: "w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-white/20"
+            })
+          ),
+          err ? React.createElement("div", { className: "text-red-400 text-sm" }, err) : null,
+          React.createElement("button", { disabled: loading, className: "w-full py-2 rounded-xl bg-gradient-to-r from-cyan-400 to-fuchsia-500 font-semibold disabled:opacity-60" },
+            loading ? "Signing in…" : "Sign in"
+          )
+        )
+      )
+    )
   );
 }
 
 function DashboardHome() {
+  const React_ = React; const { useEffect, useState } = React_;
   const [stats, setStats] = useState({ total: 0, approved: 0, pending: 0, declined: 0 });
   useEffect(() => { apiFetch("/stats").then(setStats).catch(()=>{}); }, []);
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <Stat label="Total Txns" value={stats.total} />
-      <Stat label="Approved" value={stats.approved} />
-      <Stat label="Pending" value={stats.pending} />
-      <Stat label="Declined" value={stats.declined} />
-    </div>
+    React.createElement("div", { className: "grid sm:grid-cols-2 lg:grid-cols-4 gap-4" },
+      React.createElement(Stat, { label: "Total Txns", value: stats.total }),
+      React.createElement(Stat, { label: "Approved", value: stats.approved }),
+      React.createElement(Stat, { label: "Pending", value: stats.pending }),
+      React.createElement(Stat, { label: "Declined", value: stats.declined }),
+    )
   );
 }
 
 function TransactionsPage(){
+  const React_ = React; const { useEffect, useState } = React_;
   const [items, setItems] = useState([]);
-  const [page, setPage] = useState(0); // 0-indexed pages of 50
+  const [page, setPage] = useState(0);
   const [auto, setAuto] = useState(true);
   const [hideEmptyUtr, setHideEmptyUtr] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -150,12 +177,7 @@ function TransactionsPage(){
   };
 
   useEffect(() => { load(); }, [page, hideEmptyUtr]);
-
-  useEffect(() => {
-    if (!auto) return;
-    const id = setInterval(load, 30_000);
-    return () => clearInterval(id);
-  }, [auto, page, hideEmptyUtr]);
+  useEffect(() => { if (!auto) return; const id = setInterval(load, 30000); return () => clearInterval(id); }, [auto, page, hideEmptyUtr]);
 
   async function act(id, action){
     const ok = confirm(`Are you sure you want to ${action} txn ${id}?`);
@@ -167,70 +189,66 @@ function TransactionsPage(){
   }
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={auto} onChange={(e)=>setAuto(e.target.checked)} />
-            Auto-refresh (30s)
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={hideEmptyUtr} onChange={(e)=>setHideEmptyUtr(e.target.checked)} />
-            Hide Empty UTR
-          </label>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={load} className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-sm">Refresh</button>
-          <div className="text-sm text-neutral-400">Page {page+1}</div>
-          <button onClick={()=>setPage((p)=>Math.max(0,p-1))} className="px-2 py-1.5 rounded-lg bg-white/10 disabled:opacity-50" disabled={page===0}>&lt;</button>
-          <button onClick={()=>setPage((p)=>p+1)} className="px-2 py-1.5 rounded-lg bg-white/10">&gt;</button>
-        </div>
-      </div>
-
-      <div className="overflow-auto rounded-2xl border border-white/10">
-        <table className="w-full text-sm min-w-[900px]">
-          <thead className="bg-white/5">
-            <tr className="text-left">
-              <th className="p-3">S/N</th>
-              <th className="p-3">Merchant</th>
-              <th className="p-3">Sender UPI ID</th>
-              <th className="p-3">Receiver UPI ID</th>
-              <th className="p-3">UTR</th>
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.length === 0 && !loading && (
-              <tr><td colSpan={6} className="p-6 text-center text-neutral-400">No records</td></tr>
-            )}
-            {items.map((t, idx) => (
-              <tr key={t.id} className="border-t border-white/5">
-                <td className="p-3">{offset + idx + 1}</td>
-                <td className="p-3">{t.merchant_name}</td>
-                <td className="p-3 font-mono">{t.sender_upi_id}</td>
-                <td className="p-3 font-mono">{t.receiver_upi_id}</td>
-                <td className="p-3 font-mono">{t.utr || <span className="text-neutral-500">(empty)</span>}</td>
-                <td className="p-3">
-                  <div className="flex gap-2">
-                    <button onClick={()=>act(t.id, "approve")} className="px-2 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30">Approve</button>
-                    <button onClick={()=>act(t.id, "decline")} className="px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30">Decline</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {loading && <div className="text-sm text-neutral-400">Loading…</div>}
-      {err && <div className="text-sm text-rose-400">{err}</div>}
-    </div>
+    React.createElement("div", { className: "space-y-3" },
+      React.createElement("div", { className: "flex flex-wrap items-center justify-between gap-3" },
+        React.createElement("div", { className: "flex items-center gap-3" },
+          React.createElement("label", { className: "flex items-center gap-2 text-sm" },
+            React.createElement("input", { type: "checkbox", checked: auto, onChange: (e)=>setAuto(e.target.checked) }),
+            "Auto-refresh (30s)"),
+          React.createElement("label", { className: "flex items-center gap-2 text-sm" },
+            React.createElement("input", { type: "checkbox", checked: hideEmptyUtr, onChange: (e)=>setHideEmptyUtr(e.target.checked) }),
+            "Hide Empty UTR")
+        ),
+        React.createElement("div", { className: "flex items-center gap-2" },
+          React.createElement("button", { onClick: load, className: "px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-sm" }, "Refresh"),
+          React.createElement("div", { className: "text-sm text-neutral-400" }, `Page ${page + 1}`),
+          React.createElement("button", { onClick: ()=>setPage((p)=>Math.max(0,p-1)), className: "px-2 py-1.5 rounded-lg bg-white/10 disabled:opacity-50", disabled: page===0 }, "<"),
+          React.createElement("button", { onClick: ()=>setPage((p)=>p+1), className: "px-2 py-1.5 rounded-lg bg-white/10" }, ">")
+        )
+      ),
+      React.createElement("div", { className: "overflow-auto rounded-2xl border border-white/10" },
+        React.createElement("table", { className: "w-full text-sm min-w-[900px]" },
+          React.createElement("thead", { className: "bg-white/5" },
+            React.createElement("tr", { className: "text-left" },
+              React.createElement("th", { className: "p-3" }, "S/N"),
+              React.createElement("th", { className: "p-3" }, "Merchant"),
+              React.createElement("th", { className: "p-3" }, "Sender UPI ID"),
+              React.createElement("th", { className: "p-3" }, "Receiver UPI ID"),
+              React.createElement("th", { className: "p-3" }, "UTR"),
+              React.createElement("th", { className: "p-3" }, "Actions")
+            )
+          ),
+          React.createElement("tbody", null,
+            (items.length === 0 && !loading) ?
+              React.createElement("tr", null, React.createElement("td", { colSpan: 6, className: "p-6 text-center text-neutral-400" }, "No records")) :
+              items.map((t, idx) =>
+                React.createElement("tr", { key: t.id, className: "border-t border-white/5" },
+                  React.createElement("td", { className: "p-3" }, offset + idx + 1),
+                  React.createElement("td", { className: "p-3" }, t.merchant_name),
+                  React.createElement("td", { className: "p-3 font-mono" }, t.sender_upi_id),
+                  React.createElement("td", { className: "p-3 font-mono" }, t.receiver_upi_id),
+                  React.createElement("td", { className: "p-3 font-mono" }, t.utr || React.createElement("span", { className: "text-neutral-500" }, "(empty)")),
+                  React.createElement("td", { className: "p-3" },
+                    React.createElement("div", { className: "flex gap-2" },
+                      React.createElement("button", { onClick: ()=>act(t.id, "approve"), className: "px-2 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30" }, "Approve"),
+                      React.createElement("button", { onClick: ()=>act(t.id, "decline"), className: "px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30" }, "Decline")
+                    )
+                  )
+                )
+              )
+          )
+        )
+      ),
+      loading ? React.createElement("div", { className: "text-sm text-neutral-400" }, "Loading…") : null,
+      err ? React.createElement("div", { className: "text-sm text-rose-400" }, err) : null
+    )
   );
 }
 
-export default function App(){
-  const { route, push } = useHashRoute();
+function App(){
+  const { route, push } = useHashRoute(React);
+  const { useEffect, useState } = React;
   const [user, setUser] = useState(null);
-  const isAuthed = !!user;
 
   useEffect(() => {
     const token = localStorage.getItem("moshano_token");
@@ -243,15 +261,17 @@ export default function App(){
 
   const logout = () => { localStorage.removeItem("moshano_token"); setUser(null); location.hash = "/login"; };
 
-  if (!isAuthed) return <LoginPage onLogin={(u)=> setUser(u)} />;
+  if (!user) return React.createElement(LoginPage, { onLogin: (u)=> setUser(u) });
 
-  return (
-    <Shell user={user} onLogout={logout}>
-      {route === "/dashboard" && <DashboardHome />}
-      {route === "/transactions" && <TransactionsPage />}
-      {route !== "/dashboard" && route !== "/transactions" && (
-        <div className="text-neutral-400">Not found</div>
-      )}
-    </Shell>
+  return React.createElement(Shell, { user, onLogout: logout },
+    route === "/dashboard" ? React.createElement(DashboardHome) :
+    route === "/transactions" ? React.createElement(TransactionsPage) :
+    React.createElement("div", { className: "text-neutral-400" }, "Not found")
   );
 }
+
+// Mount
+ReactDOM.createRoot(document.getElementById("app")).render(React.createElement(App));
+</script>
+</body>
+</html>
