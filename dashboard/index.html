@@ -184,6 +184,7 @@ function DashboardHome() {
   );
 }
 
+<script type="text/javascript">
 function TransactionsPage(){
   const React_ = React; const { useEffect, useState } = React_;
   const [items, setItems] = useState([]);
@@ -236,8 +237,9 @@ function TransactionsPage(){
           React.createElement("button", { onClick: ()=>setPage((p)=>p+1), className: "px-2 py-1.5 rounded-lg bg-white/10" }, ">")
         )
       ),
+
       React.createElement("div", { className: "overflow-auto rounded-2xl border border-white/10" },
-        React.createElement("table", { className: "w-full text-sm min-w-[900px]" },
+        React.createElement("table", { className: "w-full text-sm min-w-[1000px]" },
           React.createElement("thead", { className: "bg-white/5" },
             React.createElement("tr", { className: "text-left" },
               React.createElement("th", { className: "p-3" }, "S/N"),
@@ -245,27 +247,54 @@ function TransactionsPage(){
               React.createElement("th", { className: "p-3" }, "Sender UPI ID"),
               React.createElement("th", { className: "p-3" }, "Receiver UPI ID"),
               React.createElement("th", { className: "p-3" }, "UTR"),
+              React.createElement("th", { className: "p-3" }, "Status"),
               React.createElement("th", { className: "p-3" }, "Actions")
             )
           ),
           React.createElement("tbody", null,
             (items.length === 0 && !loading) ?
-              React.createElement("tr", null, React.createElement("td", { colSpan: 6, className: "p-6 text-center text-neutral-400" }, "No records")) :
-              items.map((t, idx) =>
-                React.createElement("tr", { key: t.id, className: "border-t border-white/5" },
+              React.createElement("tr", null, React.createElement("td", { colSpan: 7, className: "p-6 text-center text-neutral-400" }, "No records")) :
+              items.map((t, idx) => {
+                const status = (t.status || "pending").toLowerCase();
+                const statusColor =
+                  status === "approved" ? "text-emerald-400" :
+                  status === "declined" ? "text-rose-400" :
+                  "text-sky-400"; // pending or blank
+                const disabled = status === "approved" || status === "declined";
+
+                return React.createElement("tr", { key: t.id, className: "border-t border-white/5" },
                   React.createElement("td", { className: "p-3" }, offset + idx + 1),
                   React.createElement("td", { className: "p-3" }, t.merchant_name),
                   React.createElement("td", { className: "p-3 font-mono" }, t.sender_upi_id),
                   React.createElement("td", { className: "p-3 font-mono" }, t.receiver_upi_id),
                   React.createElement("td", { className: "p-3 font-mono" }, t.utr || React.createElement("span", { className: "text-neutral-500" }, "(empty)")),
+                  React.createElement("td", { className: `p-3 font-medium ${statusColor}` },
+                    status.charAt(0).toUpperCase() + status.slice(1)
+                  ),
                   React.createElement("td", { className: "p-3" },
                     React.createElement("div", { className: "flex gap-2" },
-                      React.createElement("button", { onClick: ()=>act(t.id, "approve"), className: "px-2 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30" }, "Approve"),
-                      React.createElement("button", { onClick: ()=>act(t.id, "decline"), className: "px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30" }, "Decline")
+                      React.createElement("button", {
+                        onClick: ()=>act(t.id, "approve"),
+                        disabled,
+                        className:
+                          "px-2 py-1 rounded-lg border " +
+                          (disabled
+                            ? "opacity-40 cursor-not-allowed"
+                            : "bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-500/30")
+                      }, "Approve"),
+                      React.createElement("button", {
+                        onClick: ()=>act(t.id, "decline"),
+                        disabled,
+                        className:
+                          "px-2 py-1 rounded-lg border " +
+                          (disabled
+                            ? "opacity-40 cursor-not-allowed"
+                            : "bg-rose-500/15 hover:bg-rose-500/25 border-rose-500/30")
+                      }, "Decline")
                     )
                   )
-                )
-              )
+                );
+              })
           )
         )
       ),
@@ -274,6 +303,8 @@ function TransactionsPage(){
     )
   );
 }
+</script>
+
 
 function App(){
   const { route, push } = useHashRoute(React);
