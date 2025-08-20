@@ -96,32 +96,46 @@ function LoginPage({ onLogin }) {
 
 	async function submit(e){
 	  e.preventDefault();
-	  if (loading) return;                  // prevent double click
-	  setErr(""); 
+	  if (loading) return;
+	  setErr("");
 	  setLoading(true);
 
-	  try{
+	  try {
 		const payload = { email: email.trim(), password };
 		const { token, user } = await apiFetch("/login", {
 		  method: "POST",
 		  body: JSON.stringify(payload)
 		});
 
-		// save token + user for future reloads
+		// 1) Save token
 		localStorage.setItem("moshano_token", token);
-		localStorage.setItem("moshano_user", JSON.stringify(user));
 
-		onLogin(user);                      // updates header name
+		// 2) Fetch the actual logged-in user profile
+		let me = null;
+		try {
+		  me = await apiFetch("/me"); // requires your backend /me to return the real user
+		} catch { /* ignore */ }
+
+		// 3) Pick the best available user object
+		const effectiveUser = (me && (me.name || me.email)) ? me : user;
+
+		// 4) Persist user + update UI
+		localStorage.setItem("moshano_user", JSON.stringify(effectiveUser));
+		onLogin(effectiveUser);
+
 		location.hash = "/dashboard";
-	  }catch(err){
+	  } catch (err) {
 		const msg = String(err?.message || err);
-		setErr(msg.includes("401") || msg.toLowerCase().includes("bad creds")
-		  ? "Incorrect email or password"
-		  : `Login failed: ${msg}`);
-	  }finally{
+		setErr(
+		  msg.includes("401") || msg.toLowerCase().includes("bad creds")
+			? "Incorrect email or password"
+			: `Login failed: ${msg}`
+		);
+	  } finally {
 		setLoading(false);
 	  }
 	}
+
 
   return (
     React.createElement("div", { className: "min-h-screen grid place-items-center px-4" },
